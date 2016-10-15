@@ -5,17 +5,50 @@
  */
 package Memoria;
 
+import Excepciones.Blockeado;
+import Excepciones.FinDeProceso;
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author Todesser
  */
 public class Instruccion extends EspacioDeMemoria{
     protected String identificador;
-    protected int direccion;
+    protected long argumento;
+    protected long codigo;
 
+    public String getIdentificador() {
+        return identificador;
+    }
+
+    public long getArgumento() {
+        return argumento;
+    }
+
+    public long getCodigo() {
+        return codigo;
+    }
+
+    public Instruccion(String identificador, long argumento, long codigo) {
+        this.identificador = identificador;
+        this.argumento = argumento;
+    }    
+    
     @Override
     public Object obtener() {
-        return identificador;
+        return this;
+    }
+    
+    /**
+     *
+     * @param registros
+     * @param memoriaRam, List<String> traza
+     * @param traza
+     */
+    public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza) throws FinDeProceso, Blockeado{
+        
     }
     
 }

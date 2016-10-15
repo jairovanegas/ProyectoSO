@@ -3,16 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servicios;
+package Excepciones;
 
 /**
  *
  * @author Todesser
  */
-public class Servicio {
+public class SumaNegativa extends Exception{
+
+    public SumaNegativa() {
+    }
     
-    private String identificador;
-    private int direccion;
-    
-    abstract void ejecutar(Map<String,Registro>, Map<int, int>);
 }

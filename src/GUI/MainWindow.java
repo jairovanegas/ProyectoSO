@@ -5,22 +5,17 @@
  */
 package GUI;
 
-import Entidades.Instruccion;
-import Entidades.Proceso;
-import Entidades.Registro;
-import Entidades.RegistroDato;
-import Entidades.Util;
+import CPU.Procesador;
+import Data.InstruccionData;
+import Data.MemoriaData;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Vector;
+import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 import javax.swing.UIManager;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,17 +25,14 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainWindow extends javax.swing.JFrame {
 
-    Vector<Proceso> procesos;
-    Proceso procesoActivo;
-    List<String> trazas;
+    Procesador cpu;
+    
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
         initComponents();
-        procesos = new Vector<>();
-        procesoActivo = null;
-        trazas = new ArrayList<>();
+        cpu = new Procesador();
     }
 
     /**
@@ -359,17 +351,10 @@ public class MainWindow extends javax.swing.JFrame {
             //se crea el fichero de entorno para cargar los registros
             File archEntorno = new File(ruta);
             System.out.println(archEntorno.getAbsolutePath());
-            Proceso newProceso = new Proceso(archInstrucciones, archEntorno);
-            //aqui se deberian usar los dos archivos para leer y guardar toda la informacion en las estructuras correspondientes
-            //
-            //
-            //
-            //
-            //agregamos el proceso a la lista de procesos
-            procesos.add(newProceso);
-            if(procesoActivo==null){
-                //si no hay procesos activos el primero se asigna como el proceso activo
-                procesoActivo = newProceso;
+            try {
+                cpu.nuevoProceso(archInstrucciones, archEntorno);
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "No se encontro el archivo .dat");
             }
             //actualizamos las tablas
             actualizarProcesos();
@@ -378,27 +363,11 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddProcesoActionPerformed
 
     private void btnTickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTickActionPerformed
-        if(procesoActivo!=null){
-            if(procesoActivo.getRegistros().get("PSW").getValor()!=-1){
-                trazas.add(0, procesoActivo.tick());
-            }else{
-                JOptionPane.showMessageDialog(null, "Proceso terminado.");
-            }
-            actualizarTrazas();
-            actualizarAmbiente();
-        }else{
-            JOptionPane.showMessageDialog(null, "No hay procesos cargados.");
-        }
+        cpu.tick();
     }//GEN-LAST:event_btnTickActionPerformed
 
     private void listProcesosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listProcesosValueChanged
-        String seleccion = listProcesos.getSelectedValue();
-        for(Proceso proceso: procesos){
-            if(proceso.toString().compareTo(seleccion)==0){
-                procesoActivo = proceso;
-                actualizarAmbiente();
-            }
-        }
+        
     }//GEN-LAST:event_listProcesosValueChanged
 
     /**
@@ -465,65 +434,69 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void actualizarProcesos() {
         DefaultListModel modelo = new DefaultListModel();
-        for(Proceso proceso: procesos){
-            modelo.addElement(proceso.toString());
+        for(String nombre: cpu.getNombresProcesos()){
+            modelo.addElement(nombre);
         }
         listProcesos.setModel(modelo);
     }
     
     private void actualizarTrazas() {
         DefaultListModel modelo = new DefaultListModel();
-        for(String traza: trazas){
+        for(String traza: cpu.getTraza()){
             modelo.addElement(traza);
         }
         listTraza.setModel(modelo);
     }
     
     private void actualizarInstrucciones(){
+        List<InstruccionData> insData = cpu.getInsData(cpu.getActivo());
         String[] columnas = {"Direccion","Comando", "ADR", "Descripcion"};
-        Object[][] data = new Object[procesoActivo.getInstrucciones().size()][columnas.length];
+        Object[][] data = new Object[insData.size()][columnas.length];
         int i=0;
-        for(Instruccion ins: procesoActivo.getInstrucciones()){
-            data[i][0]=Util.toHexa(ins.getDireccion());
-            data[i][1]=Util.toHexa(ins.getTipo());
-            data[i][2]=Util.toHexa(ins.getAdr());
-            data[i][3]=Util.wichCommand(ins.getTipo());
+        for(InstruccionData ins: insData){
+            data[i][0]=Util.toHexa((int)ins.getDireccion());
+            data[i][1]=Util.toHexa((int)ins.getCodigo());
+            data[i][2]=Util.toHexa((int)ins.getAdr());
+            data[i][3]=ins.getDescripcion();
             i++;
         }
         tableInstrucciones.setModel(new DefaultTableModel(data, columnas));
     }
     
     private void actualizarMemoria(){
+        List<MemoriaData> memData = cpu.getMemData(cpu.getActivo());
         String[] columnas = {"Direccion", "Valor"};
-        Object[][] data = new Object[procesoActivo.getMemoria().size()][columnas.length];
+        Object[][] data = new Object[memData.size()][columnas.length];
         int i=0;
-        for(RegistroDato mem: procesoActivo.getMemoria()){
-            data[i][0]=Util.toHexa(mem.getDireccion());
-            data[i][1]=Util.toHexa(mem.getValor());
+        for(MemoriaData mem: memData){
+            data[i][0]=Util.toHexa((int)mem.getDireccion());
+            data[i][1]=Util.toHexa((int)mem.getValor());
             i++;
         }
         tableMemoria.setModel(new DefaultTableModel(data, columnas));
     }
     
     private void actualizarRegistro(){
+        Map<String, Long> registro = cpu.getActivo().getContexto();        
         String[] columnas = {"ID", "Valor"};
-        Object[][] data = new Object[procesoActivo.getRegistros().size()][columnas.length];
+        Object[][] data = new Object[registro.keySet().size()][columnas.length];
         int i=0;
-        for(Registro reg: procesoActivo.getRegistros().values()){
-            data[i][0]=reg.getIdentificador();
-            data[i][1]=Util.toHexa(reg.getValor());
+        for(String key: registro.keySet()){
+            data[i][0]=key;
+            data[i][1]=Util.toHexa(registro.get(key).intValue());
             i++;
         }
         tableRegistros.setModel(new DefaultTableModel(data, columnas));
     }
     
     private void actualizarPila(){
+        List<MemoriaData> memData = cpu.getMemData(cpu.getActivo());
         String[] columnas = {"Direccion", "Valor"};
-        Object[][] data = new Object[procesoActivo.getPila().size()][columnas.length];
+        Object[][] data = new Object[memData.size()][columnas.length];
         int i=0;
-        for(RegistroDato reg: procesoActivo.getPila()){
-            data[i][0]=Util.toHexa(reg.getDireccion());
-            data[i][1]=Util.toHexa(reg.getValor());
+        for(MemoriaData mem: memData){
+            data[i][0]=Util.toHexa((int)mem.getDireccion());
+            data[i][1]=Util.toHexa((int)mem.getValor());
             i++;
         }
         tablePila.setModel(new DefaultTableModel(data, columnas));

@@ -10,12 +10,18 @@ package Memoria;
  * @author Todesser
  */
 public class Dato extends EspacioDeMemoria{
+    long dato;
 
-    int dato;
-    
+    public Dato(long dato) {
+        this.dato = dato;
+    }
+      
     @Override
     public Object obtener() {
         return dato;
     }
-    
+
+    public long getDato() {
+        return dato;
+    }    
 }
