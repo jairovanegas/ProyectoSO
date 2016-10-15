@@ -23,5 +23,11 @@ public class Dato extends EspacioDeMemoria{
 
     public long getDato() {
         return dato;
-    }    
+    }   
+
+    @Override
+    public String toString() {
+        return "Dato{" + "dato=" + dato + '}';
+    }
+    
 }

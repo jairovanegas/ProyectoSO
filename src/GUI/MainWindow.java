@@ -10,6 +10,7 @@ import Data.InstruccionData;
 import Data.MemoriaData;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -364,6 +365,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void btnTickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTickActionPerformed
         cpu.tick();
+        actualizarAmbiente();
     }//GEN-LAST:event_btnTickActionPerformed
 
     private void listProcesosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listProcesosValueChanged
@@ -477,7 +479,12 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private void actualizarRegistro(){
-        Map<String, Long> registro = cpu.getActivo().getContexto();        
+        Map<String, Long> registro;
+        if(cpu.getActivo()!=null){
+            registro = cpu.getActivo().getContexto();
+        }else{
+            registro = new Hashtable<>();
+        }
         String[] columnas = {"ID", "Valor"};
         Object[][] data = new Object[registro.keySet().size()][columnas.length];
         int i=0;
@@ -490,7 +497,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private void actualizarPila(){
-        List<MemoriaData> memData = cpu.getMemData(cpu.getActivo());
+        List<MemoriaData> memData = cpu.getPilData(cpu.getActivo());
         String[] columnas = {"Direccion", "Valor"};
         Object[][] data = new Object[memData.size()][columnas.length];
         int i=0;
@@ -507,5 +514,6 @@ public class MainWindow extends javax.swing.JFrame {
         actualizarMemoria();
         actualizarRegistro();
         actualizarPila();
+        actualizarTrazas();
     }
 }

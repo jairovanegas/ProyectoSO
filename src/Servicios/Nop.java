@@ -23,7 +23,9 @@ public class Nop extends Instruccion{
     @Override
     public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza) {
         traza.add("NOP");
-        registros.put("PC", registros.get("PC")+1);
+        if(registros!=null){
+            registros.put("PC", registros.get("PC")+1);
+        }
     }
     
 }

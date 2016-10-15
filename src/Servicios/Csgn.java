@@ -29,7 +29,7 @@ public class Csgn extends Instruccion{
             registros.put("PSW", (long)1);
         }
         registros.put("PC", registros.get("PC") + 1);
-        traza.add("PSW inverted");
+        traza.add("CSGN: PSW inverted");
     }
     
 }

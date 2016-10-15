@@ -33,5 +33,10 @@ public class MemoriaData {
         this.direccion = direccion;
         this.valor = valor;
     }
+
+    @Override
+    public String toString() {
+        return "MemoriaData{" + "direccion=" + direccion + ", valor=" + valor + '}';
+    }
     
 }

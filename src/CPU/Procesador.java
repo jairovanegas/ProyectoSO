@@ -7,7 +7,6 @@ package CPU;
 
 import Data.InstruccionData;
 import Data.MemoriaData;
-import Data.PilaData;
 import Excepciones.Blockeado;
 import Excepciones.FinDeProceso;
 import Memoria.Dato;
@@ -55,7 +54,12 @@ public class Procesador {
         Proceso nuevo = new Proceso(instrucciones, datos, memoriaRam, ib, db);
         ib += nuevo.getiLong();
         db += nuevo.getdLong();
-        listos.add(nuevo);
+        if(activo==null){
+            activo=nuevo;
+        }else{
+            listos.add(nuevo);
+        }
+        
     }
     
     public void tick(){
@@ -163,44 +167,55 @@ public class Procesador {
         return nombres;
     }
     
-    public List<InstruccionData> getInsData(Proceso proceso){
-        long insInicio = proceso.getContexto().get("IB");
-        long insFinal = proceso.getiLong()-1;
+    public List<InstruccionData> getInsData(Proceso proceso) {
         List<InstruccionData> retorno = new ArrayList<>();
-        while(insInicio<=insFinal){
-            long direccion = insInicio;
-            Instruccion ins = (Instruccion)memoriaRam.get(insInicio);
-            if(ins!=null){
-                retorno.add(new InstruccionData(direccion, ins.getCodigo(), ins.getArgumento(), ins.getIdentificador()));
+        if (proceso != null) {
+            long insInicio = proceso.getContexto().get("IB");
+            long insFinal = insInicio + proceso.getiLong() - 1;
+            while (insInicio <= insFinal) {
+                long direccion = insInicio;
+                Instruccion ins = (Instruccion) memoriaRam.get(insInicio);
+                if (ins != null) {
+                    retorno.add(new InstruccionData(direccion, ins.getCodigo(), ins.getArgumento(), ins.getIdentificador()));
+                }
+                insInicio++;
             }
         }
         return retorno;
     }
     
     public List<MemoriaData> getMemData(Proceso proceso){
-        long memInicio = proceso.getContexto().get("DB");
-        long memFinal = proceso.getdLong()-1;
         List<MemoriaData> retorno = new ArrayList<>();
+        if(proceso==null){
+            return retorno;
+        }
+        long memInicio = proceso.getContexto().get("DB");
+        long memFinal = memInicio + proceso.getdLong()-1;        
         while(memInicio<=memFinal){
             long direccion = memInicio;
             Dato mem = (Dato)memoriaRam.get(memInicio);
             if(mem!=null){
                 retorno.add(new MemoriaData(direccion, mem.getDato()));
             }
+            memInicio++;
         }
         return retorno;
     }
     
     public List<MemoriaData> getPilData(Proceso proceso){
-        long memInicio = proceso.getContexto().get("SP");
-        long memFinal = proceso.getdLong()-1;
         List<MemoriaData> retorno = new ArrayList<>();
+        if(proceso==null){
+            return retorno;
+        }
+        long memInicio = proceso.getContexto().get("SP");
+        long memFinal = memInicio + proceso.getdLong()-1;
         while(memInicio<=memFinal){
             long direccion = memInicio;
-            Dato mem = (Dato)memoriaRam.get(memInicio);
+            Dato mem = (Dato)memoriaRam.get(memInicio);            
             if(mem!=null){
                 retorno.add(new MemoriaData(direccion, mem.getDato()));
             }
+            memInicio++;
         }
         return retorno;
     }

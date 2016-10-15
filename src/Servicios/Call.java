@@ -24,11 +24,10 @@ public class Call extends Instruccion{
     @Override
     public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza) {
         long pc = registros.get("PC");
-        long pcNuevo = registros.get("IB") + argumento;
+        long pcNuevo = argumento;
         memoriaRam.put(registros.get("SP"), new Dato(pc));
         registros.put("PC", pcNuevo);
         registros.put("SP", registros.get("SP")-1);
-        traza.add("JUMPING from " + pc + " to " +pcNuevo);
-    }
-    
+        traza.add("CALL: JUMPING from " + pc + " to " +pcNuevo);
+    }    
 }

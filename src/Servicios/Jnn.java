@@ -24,10 +24,10 @@ public class Jnn extends Instruccion{
     public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza) {
         long psw = registros.get("PSW");
         if(psw==0){
-            registros.put("PC", registros.get("DB")+argumento);
-            traza.add("JUMPING to "+registros.get("PC"));
+            registros.put("PC", argumento);
+            traza.add("JNN: JUMPING to "+registros.get("PC"));
         }else{
-            traza.add("not JUMPING to "+registros.get("PC")); 
+            traza.add("JNN: not JUMPING to "+registros.get("PC")); 
         }
     }
     

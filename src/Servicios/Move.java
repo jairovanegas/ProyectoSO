@@ -24,7 +24,7 @@ public class Move extends Instruccion{
     @Override
     public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza) {
         memoriaRam.put(registros.get("DB") + argumento, new Dato(registros.get("AC")));
-        traza.add("AC MOVED to " + registros.get("DB") + argumento);
+        traza.add("MOVE: AC MOVED to " + registros.get("DB") + argumento);
         registros.put("PC", registros.get("PC")+1);
     }
     

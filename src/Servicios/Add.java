@@ -28,7 +28,7 @@ public class Add extends Instruccion{
             registros.put("PSW", (long)1);
         }
         registros.put("AC", ac+adr);
-        traza.add("ADD "+ adr + " to " + ac);
+        traza.add("ADD: ADD "+ adr + " to " + ac);
         registros.put("PC", registros.get("PC")+1);
     }
     

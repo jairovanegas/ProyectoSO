@@ -7,6 +7,8 @@ package Planificadores;
 
 import CPU.Procesador;
 import CPU.Proceso;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -38,14 +40,18 @@ public class FiFo implements Planificador{
             proceso.aumentarEspera();
             proceso.aumentarRespuesta();
         }
+        List<Proceso> revividos = new ArrayList<>();
         for (Proceso proceso: cpu.getBloqueados()) {
             proceso.aumentarEspera();
             proceso.aumentarRespuesta();
             proceso.disminuirBloqueo();
             if(proceso.getBloqueoRestante()==0){
-                cpu.getBloqueados().remove(proceso);
-                cpu.getListos().add(proceso);
+                revividos.add(proceso);
             }
+        }
+        for(Proceso revivido: revividos){
+            cpu.getBloqueados().remove(revivido);
+            cpu.getListos().add(revivido);
         }
     }
     

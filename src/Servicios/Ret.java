@@ -22,10 +22,11 @@ public class Ret extends Instruccion{
 
     @Override
     public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza) {
-        registros.put("PC", (long)memoriaRam.get(registros.get("SP")+registros.get("DB")+1).obtener());
-        memoriaRam.remove(registros.get("SP")+registros.get("DB")+1);
+        registros.put("PC", (long)memoriaRam.get(registros.get("SP")+1).obtener());
+        memoriaRam.remove(registros.get("SP")+1);
         registros.put("SP", registros.get("SP")+1);
         registros.put("PC", registros.get("PC")+1);
+        traza.add("RET:");
     }
     
 }
