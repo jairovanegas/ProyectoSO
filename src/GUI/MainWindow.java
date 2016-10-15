@@ -45,6 +45,7 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        planificadores = new javax.swing.ButtonGroup();
         pPrincipal = new javax.swing.JPanel();
         pInstrucciones = new javax.swing.JPanel();
         spInstrucciones = new javax.swing.JScrollPane();
@@ -67,6 +68,12 @@ public class MainWindow extends javax.swing.JFrame {
         pTraza = new javax.swing.JPanel();
         spTraza = new javax.swing.JScrollPane();
         listTraza = new javax.swing.JList<>();
+        radioFIFO = new javax.swing.JRadioButton();
+        radioSJF = new javax.swing.JRadioButton();
+        radioSRTF = new javax.swing.JRadioButton();
+        radioPrioridad = new javax.swing.JRadioButton();
+        radioRoundRobin = new javax.swing.JRadioButton();
+        radioQuantum = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -253,16 +260,89 @@ public class MainWindow extends javax.swing.JFrame {
 
         spTraza.setViewportView(listTraza);
 
+        planificadores.add(radioFIFO);
+        radioFIFO.setSelected(true);
+        radioFIFO.setText("FIFO");
+        radioFIFO.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioFIFOActionPerformed(evt);
+            }
+        });
+
+        planificadores.add(radioSJF);
+        radioSJF.setText("SJF");
+        radioSJF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioSJFActionPerformed(evt);
+            }
+        });
+
+        planificadores.add(radioSRTF);
+        radioSRTF.setText("SRTF");
+        radioSRTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioSRTFActionPerformed(evt);
+            }
+        });
+
+        planificadores.add(radioPrioridad);
+        radioPrioridad.setText("Prioridad");
+        radioPrioridad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioPrioridadActionPerformed(evt);
+            }
+        });
+
+        planificadores.add(radioRoundRobin);
+        radioRoundRobin.setText("Round Robin");
+        radioRoundRobin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioRoundRobinActionPerformed(evt);
+            }
+        });
+
+        planificadores.add(radioQuantum);
+        radioQuantum.setText("Quantum");
+        radioQuantum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioQuantumActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pTrazaLayout = new javax.swing.GroupLayout(pTraza);
         pTraza.setLayout(pTrazaLayout);
         pTrazaLayout.setHorizontalGroup(
             pTrazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spTraza)
+            .addGroup(pTrazaLayout.createSequentialGroup()
+                .addComponent(spTraza)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pTrazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(radioFIFO)
+                    .addComponent(radioSJF)
+                    .addComponent(radioSRTF)
+                    .addComponent(radioPrioridad)
+                    .addComponent(radioRoundRobin)
+                    .addComponent(radioQuantum))
+                .addContainerGap())
         );
         pTrazaLayout.setVerticalGroup(
             pTrazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pTrazaLayout.createSequentialGroup()
-                .addComponent(spTraza, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                .addGroup(pTrazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spTraza)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pTrazaLayout.createSequentialGroup()
+                        .addComponent(radioFIFO)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(radioSJF)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(radioSRTF)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(radioPrioridad)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(radioRoundRobin)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(radioQuantum)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -289,7 +369,7 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(pMemoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(pInstrucciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 3, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pPrincipalLayout.setVerticalGroup(
@@ -372,6 +452,30 @@ public class MainWindow extends javax.swing.JFrame {
         
     }//GEN-LAST:event_listProcesosValueChanged
 
+    private void radioFIFOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioFIFOActionPerformed
+        cpu.seleccionarPlan(1);
+    }//GEN-LAST:event_radioFIFOActionPerformed
+
+    private void radioSJFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioSJFActionPerformed
+        cpu.seleccionarPlan(2);
+    }//GEN-LAST:event_radioSJFActionPerformed
+
+    private void radioSRTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioSRTFActionPerformed
+        cpu.seleccionarPlan(3);
+    }//GEN-LAST:event_radioSRTFActionPerformed
+
+    private void radioPrioridadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioPrioridadActionPerformed
+        cpu.seleccionarPlan(4);
+    }//GEN-LAST:event_radioPrioridadActionPerformed
+
+    private void radioRoundRobinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRoundRobinActionPerformed
+        cpu.seleccionarPlan(5);
+    }//GEN-LAST:event_radioRoundRobinActionPerformed
+
+    private void radioQuantumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioQuantumActionPerformed
+        cpu.seleccionarPlan(6);
+    }//GEN-LAST:event_radioQuantumActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -422,6 +526,13 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel pProcesos;
     private javax.swing.JPanel pRegistros;
     private javax.swing.JPanel pTraza;
+    private javax.swing.ButtonGroup planificadores;
+    private javax.swing.JRadioButton radioFIFO;
+    private javax.swing.JRadioButton radioPrioridad;
+    private javax.swing.JRadioButton radioQuantum;
+    private javax.swing.JRadioButton radioRoundRobin;
+    private javax.swing.JRadioButton radioSJF;
+    private javax.swing.JRadioButton radioSRTF;
     private javax.swing.JScrollPane spInstrucciones;
     private javax.swing.JScrollPane spMemoria;
     private javax.swing.JScrollPane spPila;

@@ -220,4 +220,28 @@ public class Procesador {
         return retorno;
     }
     
+    public void seleccionarPlan(int x){
+        switch(x){
+            case 1:
+                planificador = new FiFo();
+                break;
+            case 2:
+                //Aqui tienes que poner la instancia de cada tipo de planificador.
+                //Aqui tambien tienes que pedir la informacion faltante para cada cosa.
+                //como por ejemplo si se necesita un quantum, o que ingrese las prioridades de los procesos y todo eso.
+                break;
+            case 3:
+                //Aqui tienes que poner la instancia de cada tipo de planificador.
+                break;
+            case 4:
+                //Aqui tienes que poner la instancia de cada tipo de planificador.
+                break;
+            case 5:
+                //Aqui tienes que poner la instancia de cada tipo de planificador.
+                break;
+            case 6:
+                //Aqui tienes que poner la instancia de cada tipo de planificador.
+                break;
+        }
+    }
 }
