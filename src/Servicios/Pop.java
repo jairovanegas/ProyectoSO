@@ -5,6 +5,7 @@
  */
 package Servicios;
 
+import Memoria.Dato;
 import Memoria.EspacioDeMemoria;
 import Memoria.Instruccion;
 import java.util.List;
@@ -23,10 +24,10 @@ public class Pop extends Instruccion{
     @Override
     public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza) {
         registros.put("AC", (long)memoriaRam.get(registros.get("SP")+1).obtener());
-        memoriaRam.remove(registros.get("SP")+1);
+        Dato dato = (Dato)memoriaRam.remove(registros.get("SP")+1);
         registros.put("SP", registros.get("SP")+1);
         registros.put("PC", registros.get("PC")+1);
-        traza.add("POP: ");
+        traza.add(0,"POP: " + dato.obtener());
     }
     
 }

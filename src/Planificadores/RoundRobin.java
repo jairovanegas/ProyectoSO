@@ -8,36 +8,48 @@ package Planificadores;
 import CPU.Procesador;
 import CPU.Proceso;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  *
  * @author Todesser
  */
-public class FiFo implements Planificador{
+public class RoundRobin implements Planificador{
 
+    boolean procesoMasCorto(Proceso a, Proceso b){
+        if(a.getInsRestantes()>b.getInsRestantes()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    
     @Override
     public Proceso seleccionar(Procesador cpu) {
+        Collections.shuffle(cpu.getListos());
+        Proceso nuActivo;
         if(cpu.getActivo()==null){
-            if(cpu.getListos().size()>0){
-                Proceso elegido = cpu.getListos().remove(0);
-                elegido.setEstado("Activo");
-                avanzarTick(cpu);
-                return elegido;
-            }else{
-                avanzarTick(cpu);
-                return null;
-            }
+             nuActivo = cpu.getListos().remove(0);
         }else{
-            avanzarTick(cpu);
-            return cpu.getActivo();
+            if(cpu.getActivo().getQuantum()>=cpu.getQuantum()){
+                cpu.getActivo().setQuantum(0);
+                cpu.getListos().add(cpu.getActivo());
+                nuActivo = cpu.getListos().remove(0);
+            }else{
+                nuActivo = cpu.getActivo();
+            }
         }
+        avanzarTick(cpu);
+        return nuActivo;
     }
 
     @Override
     public void avanzarTick(Procesador cpu) {
         if(cpu.getActivo()!=null){
             cpu.getActivo().aumentarRespuesta();
+            cpu.getActivo().aumentarQuantum();
         }
         for(Proceso proceso: cpu.getListos()){
             proceso.aumentarEspera();

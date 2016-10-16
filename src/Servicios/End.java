@@ -23,7 +23,7 @@ public class End extends Instruccion{
 
     @Override
     public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza) throws FinDeProceso{
-        traza.add("END");
+        traza.add(0,"END");
         throw new FinDeProceso();
     }
     

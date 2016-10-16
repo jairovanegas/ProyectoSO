@@ -30,6 +30,7 @@ public class Proceso {
     private long tiempoEspera;
     private long tiempoRespuesta;
     private String estado;
+    private long insRestantes;
 
     public Proceso(File instrucciones, File datos, Map<Long, EspacioDeMemoria> memoriaRam, long ib, long db) throws FileNotFoundException {
         nombre = instrucciones.getName();
@@ -55,6 +56,7 @@ public class Proceso {
                 i++;
             }
             iLong = i;
+            insRestantes = iLong;
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException();
         }
@@ -67,7 +69,7 @@ public class Proceso {
                 i++;
             }
             dLong = i+100;
-            contexto.put("SP", (long)i+100);
+            contexto.put("SP", (long)db+i+100);
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException();
         }
@@ -163,5 +165,17 @@ public class Proceso {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+    
+    public void disminuirInsRestantes(){
+        insRestantes -= 1;
+    }
+    
+    public long getInsRestantes(){
+        return insRestantes;
+    }
+    
+    public void aumentarQuantum(){
+        quantum+=1;
     }
 }

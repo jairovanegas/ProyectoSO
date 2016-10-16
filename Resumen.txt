@@ -1,0 +1,12 @@
+Estadisticas de ejecucion:
+
+Proceso: programa-1.ins
+Estado: Finalizado
+Tiempo en espera: 4
+Tiempo de respuesta: 11
+
+Proceso: test2.ins
+Estado: Finalizado
+Tiempo en espera: 8
+Tiempo de respuesta: 18
+

@@ -23,10 +23,11 @@ public class Push extends Instruccion{
 
     @Override
     public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza) {
-        memoriaRam.put(registros.get("SP"), new Dato(registros.get("AC")));
+        Dato dato = new Dato(registros.get("AC"));
+        memoriaRam.put(registros.get("SP"), dato);
         registros.put("SP", registros.get("SP")-1);
         registros.put("PC", registros.get("PC")+1);
-        traza.add("PUSH:");
+        traza.add(0,"PUSH: " + dato.obtener());
     }
     
 }

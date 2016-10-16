@@ -25,9 +25,9 @@ public class Jnn extends Instruccion{
         long psw = registros.get("PSW");
         if(psw==0){
             registros.put("PC", argumento);
-            traza.add("JNN: JUMPING to "+registros.get("PC"));
+            traza.add(0,"JNN: jumping to "+registros.get("PC"));
         }else{
-            traza.add("JNN: not JUMPING to "+registros.get("PC")); 
+            traza.add(0,"JNN: not jumping to "+registros.get("PC")); 
         }
     }
     

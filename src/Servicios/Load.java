@@ -23,7 +23,7 @@ public class Load extends Instruccion{
     @Override
     public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza) {
         registros.put("AC", (long)memoriaRam.get(registros.get("DB")+argumento).obtener());
-        traza.add("LOAD: LOADED "+(long)memoriaRam.get(registros.get("DB")+argumento).obtener());
+        traza.add(0,"LOAD: load "+(long)memoriaRam.get(registros.get("DB")+argumento).obtener());
         registros.put("PC", registros.get("PC")+1);
     }
     

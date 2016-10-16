@@ -17,6 +17,7 @@ import Planificadores.Planificador;
 import Servicios.Nop;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ public class Procesador {
     private Map<Long, EspacioDeMemoria> memoriaRam;
     private long ib;
     private long db;
+    private long quantum;
 
     public Procesador() {
         activo = null;
@@ -67,10 +69,12 @@ public class Procesador {
         try {
             if(activo!=null){
                 ((Instruccion)memoriaRam.get(activo.getContexto().get("PC")+activo.getContexto().get("IB"))).ejecutar(activo.getContexto(), memoriaRam, traza);
+                activo.disminuirInsRestantes();
             }else{
                 new Nop(null, 0, 0).ejecutar(null, null, traza);
             }
         } catch (FinDeProceso ex) {
+            activo.setEstado("Finalizado");
             terminados.add(activo);
             activo = null;
         } catch (Blockeado ex) {
@@ -190,7 +194,7 @@ public class Procesador {
             return retorno;
         }
         long memInicio = proceso.getContexto().get("DB");
-        long memFinal = memInicio + proceso.getdLong()-1;        
+        long memFinal = proceso.getContexto().get("SP");        
         while(memInicio<=memFinal){
             long direccion = memInicio;
             Dato mem = (Dato)memoriaRam.get(memInicio);
@@ -243,5 +247,27 @@ public class Procesador {
                 //Aqui tienes que poner la instancia de cada tipo de planificador.
                 break;
         }
+    }
+    
+    public void imprimirResumen(File salida) throws FileNotFoundException{
+        PrintWriter escritor = new PrintWriter(salida);
+        escritor.println("Estadisticas de ejecucion:");
+        escritor.println();
+        for(Proceso proc: terminados){
+            escritor.println("Proceso: " + proc.getNombre());
+            escritor.println("Estado: " + proc.getEstado());
+            escritor.println("Tiempo en espera: " + proc.getTiempoEspera());
+            escritor.println("Tiempo de respuesta: " + proc.getTiempoRespuesta());
+            escritor.println();
+        }
+        escritor.close();
+    }
+
+    public long getQuantum() {
+        return quantum;
+    }
+
+    public void setQuantum(long quantum) {
+        this.quantum = quantum;
     }
 }

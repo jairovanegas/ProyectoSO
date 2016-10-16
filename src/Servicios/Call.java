@@ -28,6 +28,6 @@ public class Call extends Instruccion{
         memoriaRam.put(registros.get("SP"), new Dato(pc));
         registros.put("PC", pcNuevo);
         registros.put("SP", registros.get("SP")-1);
-        traza.add("CALL: JUMPING from " + pc + " to " +pcNuevo);
+        traza.add(0,"CALL: from " + pc + " to " + pcNuevo);
     }    
 }

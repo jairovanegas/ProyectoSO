@@ -10,9 +10,13 @@ import Data.InstruccionData;
 import Data.MemoriaData;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -63,7 +67,6 @@ public class MainWindow extends javax.swing.JFrame {
         spPila = new javax.swing.JScrollPane();
         tablePila = new javax.swing.JTable();
         btnTick = new javax.swing.JButton();
-        btnDelProceso = new javax.swing.JButton();
         btnAddProceso = new javax.swing.JButton();
         pTraza = new javax.swing.JPanel();
         spTraza = new javax.swing.JScrollPane();
@@ -74,6 +77,7 @@ public class MainWindow extends javax.swing.JFrame {
         radioPrioridad = new javax.swing.JRadioButton();
         radioRoundRobin = new javax.swing.JRadioButton();
         radioQuantum = new javax.swing.JRadioButton();
+        btnPrint = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -243,9 +247,6 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        btnDelProceso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Graph/del 16x.png"))); // NOI18N
-        btnDelProceso.setText("Eliminar Proceso");
-
         btnAddProceso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Graph/add 16x.png"))); // NOI18N
         btnAddProceso.setText("Añadir proceso");
         btnAddProceso.addActionListener(new java.awt.event.ActionListener() {
@@ -346,6 +347,14 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btnPrint.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnPrint.setText("Imprimir Resumen");
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pPrincipalLayout = new javax.swing.GroupLayout(pPrincipal);
         pPrincipal.setLayout(pPrincipalLayout);
         pPrincipalLayout.setHorizontalGroup(
@@ -356,12 +365,11 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(pTraza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pPrincipalLayout.createSequentialGroup()
                         .addGroup(pPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(pProcesos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnAddProceso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnDelProceso, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnTick, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(pPila, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(pProcesos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAddProceso, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnTick, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pPila, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(pPrincipalLayout.createSequentialGroup()
@@ -383,10 +391,10 @@ public class MainWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAddProceso)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelProceso)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnTick, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(24, 24, 24)
+                        .addComponent(btnTick, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pMemoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pRegistros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -410,7 +418,7 @@ public class MainWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 633, Short.MAX_VALUE)
+                .addComponent(pPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 656, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -476,6 +484,25 @@ public class MainWindow extends javax.swing.JFrame {
         cpu.seleccionarPlan(6);
     }//GEN-LAST:event_radioQuantumActionPerformed
 
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+        JFileChooser selector = new JFileChooser();
+        selector.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        selector.setFileFilter(new FileNameExtensionFilter(null, "txt"));
+        selector.setApproveButtonText("Guardar");
+        if(selector.showOpenDialog(MainWindow.this) == JFileChooser.APPROVE_OPTION){
+            try {
+                if(!selector.getSelectedFile().getPath().endsWith(".txt")){
+                    File salida = new File(selector.getSelectedFile().getPath() + ".txt");
+                    cpu.imprimirResumen(salida);
+                }else{
+                    cpu.imprimirResumen(selector.getSelectedFile());
+                }
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }        
+    }//GEN-LAST:event_btnPrintActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -515,7 +542,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddProceso;
-    private javax.swing.JButton btnDelProceso;
+    private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnTick;
     private javax.swing.JList<String> listProcesos;
     private javax.swing.JList<String> listTraza;
@@ -567,9 +594,9 @@ public class MainWindow extends javax.swing.JFrame {
         Object[][] data = new Object[insData.size()][columnas.length];
         int i=0;
         for(InstruccionData ins: insData){
-            data[i][0]=Util.toHexa((int)ins.getDireccion());
-            data[i][1]=Util.toHexa((int)ins.getCodigo());
-            data[i][2]=Util.toHexa((int)ins.getAdr());
+            data[i][0]=ins.getDireccion();
+            data[i][1]=ins.getCodigo();
+            data[i][2]=ins.getAdr();
             data[i][3]=ins.getDescripcion();
             i++;
         }
@@ -582,8 +609,8 @@ public class MainWindow extends javax.swing.JFrame {
         Object[][] data = new Object[memData.size()][columnas.length];
         int i=0;
         for(MemoriaData mem: memData){
-            data[i][0]=Util.toHexa((int)mem.getDireccion());
-            data[i][1]=Util.toHexa((int)mem.getValor());
+            data[i][0]=mem.getDireccion();
+            data[i][1]=mem.getValor();
             i++;
         }
         tableMemoria.setModel(new DefaultTableModel(data, columnas));
@@ -601,7 +628,7 @@ public class MainWindow extends javax.swing.JFrame {
         int i=0;
         for(String key: registro.keySet()){
             data[i][0]=key;
-            data[i][1]=Util.toHexa(registro.get(key).intValue());
+            data[i][1]=registro.get(key).intValue();
             i++;
         }
         tableRegistros.setModel(new DefaultTableModel(data, columnas));
@@ -613,8 +640,8 @@ public class MainWindow extends javax.swing.JFrame {
         Object[][] data = new Object[memData.size()][columnas.length];
         int i=0;
         for(MemoriaData mem: memData){
-            data[i][0]=Util.toHexa((int)mem.getDireccion());
-            data[i][1]=Util.toHexa((int)mem.getValor());
+            data[i][0]=mem.getDireccion();
+            data[i][1]=mem.getValor();
             i++;
         }
         tablePila.setModel(new DefaultTableModel(data, columnas));

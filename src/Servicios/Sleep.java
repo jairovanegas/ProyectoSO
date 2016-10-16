@@ -23,7 +23,7 @@ public class Sleep extends Instruccion{
 
     @Override
     public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza)throws Blockeado{
-        traza.add("SLEEPING for " + argumento + " ticks");
+        traza.add(0,"SLEEP: sleeping for " + argumento + " ticks");
         registros.put("PC", registros.get("PC")+1);
         throw new Blockeado(argumento);
     }
