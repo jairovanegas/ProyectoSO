@@ -8,8 +8,6 @@ package Planificadores;
 import CPU.Procesador;
 import CPU.Proceso;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -18,30 +16,29 @@ import java.util.List;
  */
 public class RoundRobin implements Planificador{
 
-    boolean procesoMasCorto(Proceso a, Proceso b){
-        if(a.getInsRestantes()>b.getInsRestantes()){
-            return false;
-        }else{
-            return true;
-        }
-    }
-    
     @Override
     public Proceso seleccionar(Procesador cpu) {
-        Collections.shuffle(cpu.getListos());
         Proceso nuActivo;
         if(cpu.getActivo()==null){
-             nuActivo = cpu.getListos().remove(0);
+             if(cpu.getListos().size()>0){
+                 nuActivo = cpu.getListos().remove(0);
+             }else{
+                 nuActivo = null;
+             }
         }else{
             if(cpu.getActivo().getQuantum()>=cpu.getQuantum()){
-                cpu.getActivo().setQuantum(0);
-                cpu.getListos().add(cpu.getActivo());
-                nuActivo = cpu.getListos().remove(0);
+                if (cpu.getListos().size() > 0) {
+                    cpu.getActivo().setQuantum(0);
+                    cpu.getListos().add(cpu.getActivo());
+                    nuActivo = cpu.getListos().remove(0);
+                }else{
+                    cpu.getActivo().setQuantum(0);
+                    nuActivo = cpu.getActivo();
+                }
             }else{
                 nuActivo = cpu.getActivo();
             }
         }
-        avanzarTick(cpu);
         return nuActivo;
     }
 

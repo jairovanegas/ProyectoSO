@@ -6,6 +6,7 @@
 package GUI;
 
 import CPU.Procesador;
+import CPU.Proceso;
 import Data.InstruccionData;
 import Data.MemoriaData;
 import java.io.File;
@@ -76,8 +77,9 @@ public class MainWindow extends javax.swing.JFrame {
         radioSRTF = new javax.swing.JRadioButton();
         radioPrioridad = new javax.swing.JRadioButton();
         radioRoundRobin = new javax.swing.JRadioButton();
-        radioQuantum = new javax.swing.JRadioButton();
         btnPrint = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        lblActivo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -279,7 +281,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         planificadores.add(radioSRTF);
-        radioSRTF.setText("SRTF");
+        radioSRTF.setText("SRT");
         radioSRTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 radioSRTFActionPerformed(evt);
@@ -287,7 +289,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         planificadores.add(radioPrioridad);
-        radioPrioridad.setText("Prioridad");
+        radioPrioridad.setText("Event Driven");
         radioPrioridad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 radioPrioridadActionPerformed(evt);
@@ -302,35 +304,26 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        planificadores.add(radioQuantum);
-        radioQuantum.setText("Quantum");
-        radioQuantum.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioQuantumActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout pTrazaLayout = new javax.swing.GroupLayout(pTraza);
         pTraza.setLayout(pTrazaLayout);
         pTrazaLayout.setHorizontalGroup(
             pTrazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pTrazaLayout.createSequentialGroup()
-                .addComponent(spTraza)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(spTraza, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pTrazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(radioFIFO)
                     .addComponent(radioSJF)
                     .addComponent(radioSRTF)
                     .addComponent(radioPrioridad)
-                    .addComponent(radioRoundRobin)
-                    .addComponent(radioQuantum))
+                    .addComponent(radioRoundRobin))
                 .addContainerGap())
         );
         pTrazaLayout.setVerticalGroup(
             pTrazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pTrazaLayout.createSequentialGroup()
                 .addGroup(pTrazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spTraza)
+                    .addComponent(spTraza, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pTrazaLayout.createSequentialGroup()
                         .addComponent(radioFIFO)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -341,8 +334,6 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(radioPrioridad)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(radioRoundRobin)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(radioQuantum)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -355,6 +346,12 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel1.setText("Activo:");
+
+        lblActivo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblActivo.setText("Ninguno");
+
         javax.swing.GroupLayout pPrincipalLayout = new javax.swing.GroupLayout(pPrincipal);
         pPrincipal.setLayout(pPrincipalLayout);
         pPrincipalLayout.setHorizontalGroup(
@@ -362,23 +359,22 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(pPrincipalLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(pPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pProcesos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddProceso, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTick, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pPila, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(lblActivo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pTraza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pPrincipalLayout.createSequentialGroup()
-                        .addGroup(pPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pProcesos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAddProceso, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnTick, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pPila, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(pRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(pPrincipalLayout.createSequentialGroup()
-                                .addComponent(pRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(pMemoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(pInstrucciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 3, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(pMemoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pInstrucciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pPrincipalLayout.setVerticalGroup(
             pPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -401,9 +397,13 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(pPrincipalLayout.createSequentialGroup()
                         .addComponent(pPila, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pTraza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(342, 342, 342))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pTraza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pPrincipalLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(42, 42, 42)
+                        .addComponent(lblActivo))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -417,9 +417,8 @@ public class MainWindow extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 656, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -440,14 +439,23 @@ public class MainWindow extends javax.swing.JFrame {
             //se crea el fichero de entorno para cargar los registros
             File archEntorno = new File(ruta);
             System.out.println(archEntorno.getAbsolutePath());
+            Proceso nuevo = null;
             try {
-                cpu.nuevoProceso(archInstrucciones, archEntorno);
+                nuevo = cpu.nuevoProceso(archInstrucciones, archEntorno);
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "No se encontro el archivo .dat");
             }
+            if (radioPrioridad.isSelected()) {
+                try {
+                    long prioridad = Long.parseLong(JOptionPane.showInputDialog("Ingrese la prioridad para " + nuevo.getNombre() + " entre 0-9999, menor numero mayor prioridad."));
+                    nuevo.setPrioridad(prioridad);
+                } catch (NullPointerException | NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Entrada invalida, asignando prioridad estandar(9999)");
+                    nuevo.setPrioridad(9999);
+                }
+            }
             //actualizamos las tablas
             actualizarProcesos();
-            actualizarAmbiente();
         }
     }//GEN-LAST:event_btnAddProcesoActionPerformed
 
@@ -474,15 +482,33 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void radioPrioridadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioPrioridadActionPerformed
         cpu.seleccionarPlan(4);
+        for(Proceso proceso: cpu.getProcesosSinPrioridad()){
+            try{
+                long prioridad = Long.parseLong(JOptionPane.showInputDialog("Ingrese la prioridad para "+proceso.getNombre()+" entre 0-9999, menor numero mayor prioridad."));
+                proceso.setPrioridad(prioridad);
+            }catch(NullPointerException|NumberFormatException e){
+                JOptionPane.showMessageDialog(this, "Entrada invalida, asignando prioridad estandar(9999)");
+                proceso.setPrioridad(9999);
+            }
+            
+        }
     }//GEN-LAST:event_radioPrioridadActionPerformed
 
     private void radioRoundRobinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRoundRobinActionPerformed
-        cpu.seleccionarPlan(5);
+        String quantum = JOptionPane.showInputDialog("Ingrese el quantum para el sistema: ");
+        try {
+            if (quantum != null) {
+                cpu.setQuantum(Long.parseLong(quantum));
+                cpu.seleccionarPlan(5);
+            } else {
+                
+            }
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(this, "Numero erroneo, asignando quantum de 1.");
+            cpu.setQuantum(1);
+            cpu.seleccionarPlan(5);
+        }       
     }//GEN-LAST:event_radioRoundRobinActionPerformed
-
-    private void radioQuantumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioQuantumActionPerformed
-        cpu.seleccionarPlan(6);
-    }//GEN-LAST:event_radioQuantumActionPerformed
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         JFileChooser selector = new JFileChooser();
@@ -544,6 +570,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton btnAddProceso;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnTick;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblActivo;
     private javax.swing.JList<String> listProcesos;
     private javax.swing.JList<String> listTraza;
     private javax.swing.JPanel pInstrucciones;
@@ -556,7 +584,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.ButtonGroup planificadores;
     private javax.swing.JRadioButton radioFIFO;
     private javax.swing.JRadioButton radioPrioridad;
-    private javax.swing.JRadioButton radioQuantum;
     private javax.swing.JRadioButton radioRoundRobin;
     private javax.swing.JRadioButton radioSJF;
     private javax.swing.JRadioButton radioSRTF;
@@ -601,6 +628,10 @@ public class MainWindow extends javax.swing.JFrame {
             i++;
         }
         tableInstrucciones.setModel(new DefaultTableModel(data, columnas));
+        if(cpu.getActivo()!=null){
+            int sel = cpu.getActivo().getContexto().get("PC").intValue();
+            tableInstrucciones.setRowSelectionInterval(sel, sel);
+        }
     }
     
     private void actualizarMemoria(){
@@ -653,5 +684,10 @@ public class MainWindow extends javax.swing.JFrame {
         actualizarRegistro();
         actualizarPila();
         actualizarTrazas();
+        if(cpu.getActivo()!=null){
+            lblActivo.setText(cpu.getActivo().getNombre());
+        }else{
+            lblActivo.setText("Ninguno");
+        }
     }
 }

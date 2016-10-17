@@ -8,27 +8,52 @@ package Planificadores;
 import CPU.Procesador;
 import CPU.Proceso;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  *
  * @author Todesser
  */
-public class FiFo implements Planificador{
+public class EventDriven implements Planificador{
 
     @Override
     public Proceso seleccionar(Procesador cpu) {
-        if(cpu.getActivo()==null){
-            if(cpu.getListos().size()>0){
-                Proceso elegido = cpu.getListos().remove(0);
-                elegido.setEstado("Activo");
-                return elegido;
-            }else{
-                return null;
+        Collections.sort(cpu.getListos(), new Comparator<Proceso>() {
+            @Override
+            public int compare(Proceso t, Proceso t1) {
+                if(t.getPrioridad()==t1.getPrioridad()){
+                    return 0;
+                }else{
+                    if(t.getPrioridad()<t1.getPrioridad()){
+                        return 1;
+                    }else{
+                        return -1;
+                    }
+                }
             }
+        });
+        Proceso nuActivo;
+        if(cpu.getActivo()==null){
+             if(cpu.getListos().size()>0){
+                 nuActivo = cpu.getListos().remove(0);
+             }else{
+                 nuActivo = null;
+             }
         }else{
-            return cpu.getActivo();
+            if (cpu.getListos().size() > 0) {
+                if (cpu.getActivo().getInsRestantes() > cpu.getListos().get(0).getInsRestantes()) {
+                    cpu.getListos().add(cpu.getActivo());
+                    nuActivo = cpu.getListos().remove(0);
+                } else {
+                    nuActivo = cpu.getActivo();
+                }
+            }else{
+                nuActivo = cpu.getActivo();
+            }
         }
+        return nuActivo;
     }
 
     @Override

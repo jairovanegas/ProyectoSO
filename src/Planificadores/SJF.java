@@ -18,14 +18,6 @@ import java.util.List;
  */
 public class SJF implements Planificador{
 
-    boolean procesoMasCorto(Proceso a, Proceso b){
-        if(a.getInsRestantes()>b.getInsRestantes()){
-            return false;
-        }else{
-            return true;
-        }
-    }
-    
     @Override
     public Proceso seleccionar(Procesador cpu) {
         Collections.sort(cpu.getListos(), new Comparator<Proceso>() {
@@ -44,16 +36,23 @@ public class SJF implements Planificador{
         });
         Proceso nuActivo;
         if(cpu.getActivo()==null){
-             nuActivo = cpu.getListos().remove(0);
+             if(cpu.getListos().size()>0){
+                 nuActivo = cpu.getListos().remove(0);
+             }else{
+                 nuActivo = null;
+             }
         }else{
-            if(cpu.getActivo().getInsRestantes()>cpu.getListos().get(0).getInsRestantes()){
-                cpu.getListos().add(cpu.getActivo());
-                nuActivo = cpu.getListos().remove(0);
+            if (cpu.getListos().size() > 0) {
+                if (cpu.getActivo().getInsRestantes() > cpu.getListos().get(0).getInsRestantes()) {
+                    cpu.getListos().add(cpu.getActivo());
+                    nuActivo = cpu.getListos().remove(0);
+                } else {
+                    nuActivo = cpu.getActivo();
+                }
             }else{
                 nuActivo = cpu.getActivo();
             }
         }
-        avanzarTick(cpu);
         return nuActivo;
     }
 

@@ -50,5 +50,10 @@ public class Instruccion extends EspacioDeMemoria{
     public void ejecutar(Map<String, Long> registros, Map<Long, EspacioDeMemoria> memoriaRam, List<String> traza) throws FinDeProceso, Blockeado{
         
     }
+
+    @Override
+    public String toString() {
+        return "Instruccion{" + "identificador=" + identificador + ", argumento=" + argumento + ", codigo=" + codigo + '}';
+    }
     
 }

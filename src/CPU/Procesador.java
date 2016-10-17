@@ -12,8 +12,12 @@ import Excepciones.FinDeProceso;
 import Memoria.Dato;
 import Memoria.EspacioDeMemoria;
 import Memoria.Instruccion;
+import Planificadores.EventDriven;
 import Planificadores.FiFo;
 import Planificadores.Planificador;
+import Planificadores.RoundRobin;
+import Planificadores.SJF;
+import Planificadores.SRT;
 import Servicios.Nop;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,7 +56,7 @@ public class Procesador {
         db = 4000;
     }
        
-    public void nuevoProceso(File instrucciones, File datos) throws FileNotFoundException{
+    public Proceso nuevoProceso(File instrucciones, File datos) throws FileNotFoundException{
         Proceso nuevo = new Proceso(instrucciones, datos, memoriaRam, ib, db);
         ib += nuevo.getiLong();
         db += nuevo.getdLong();
@@ -61,11 +65,12 @@ public class Procesador {
         }else{
             listos.add(nuevo);
         }
-        
+        return nuevo;        
     }
     
     public void tick(){
         activo = planificador.seleccionar(this);
+        planificador.avanzarTick(this);
         try {
             if(activo!=null){
                 ((Instruccion)memoriaRam.get(activo.getContexto().get("PC")+activo.getContexto().get("IB"))).ejecutar(activo.getContexto(), memoriaRam, traza);
@@ -158,6 +163,9 @@ public class Procesador {
     
     public List<String> getNombresProcesos(){
         List<String> nombres = new ArrayList<>();
+        if(activo!=null){
+            nombres.add(activo.getNombre());
+        }
         for(Proceso proceso: listos){
             nombres.add(proceso.getNombre());
         }
@@ -212,7 +220,7 @@ public class Procesador {
             return retorno;
         }
         long memInicio = proceso.getContexto().get("SP");
-        long memFinal = memInicio + proceso.getdLong()-1;
+        long memFinal = proceso.getContexto().get("DB") + proceso.getdLong()-1;
         while(memInicio<=memFinal){
             long direccion = memInicio;
             Dato mem = (Dato)memoriaRam.get(memInicio);            
@@ -230,21 +238,16 @@ public class Procesador {
                 planificador = new FiFo();
                 break;
             case 2:
-                //Aqui tienes que poner la instancia de cada tipo de planificador.
-                //Aqui tambien tienes que pedir la informacion faltante para cada cosa.
-                //como por ejemplo si se necesita un quantum, o que ingrese las prioridades de los procesos y todo eso.
+                planificador = new SJF();
                 break;
             case 3:
-                //Aqui tienes que poner la instancia de cada tipo de planificador.
+                planificador = new SRT();
                 break;
             case 4:
-                //Aqui tienes que poner la instancia de cada tipo de planificador.
+                planificador = new EventDriven();
                 break;
             case 5:
-                //Aqui tienes que poner la instancia de cada tipo de planificador.
-                break;
-            case 6:
-                //Aqui tienes que poner la instancia de cada tipo de planificador.
+                planificador = new RoundRobin();
                 break;
         }
     }
@@ -269,5 +272,23 @@ public class Procesador {
 
     public void setQuantum(long quantum) {
         this.quantum = quantum;
+    }
+    
+    public List<Proceso> getProcesosSinPrioridad(){
+        List<Proceso> procesos = new ArrayList<>();
+        if(activo!=null){
+            procesos.add(activo);
+        }
+        for(Proceso proceso: listos){
+            if(proceso.getPrioridad()==9999){
+                procesos.add(proceso);
+            }
+        }
+        for (Proceso proceso: bloqueados) {
+            if(proceso.getPrioridad()==9999){
+                procesos.add(proceso);
+            }
+        }
+        return procesos;
     }
 }

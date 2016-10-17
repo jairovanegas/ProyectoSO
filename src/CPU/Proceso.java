@@ -36,7 +36,7 @@ public class Proceso {
         nombre = instrucciones.getName();
         quantum = 0;
         bloqueoRestante = 0;
-        prioridad = 0;
+        prioridad = 9999;
         tiempoEspera = 0;
         tiempoRespuesta = 0;
         contexto = new HashMap<>();
@@ -66,6 +66,7 @@ public class Proceso {
             while(lectorEnt.hasNext()){
                 String ent = lectorEnt.next();
                 memoriaRam.put(db + i, new Dato(Long.parseLong(ent,16)));
+                System.out.println("Proceso: "+nombre+", memoria: "+(db+i));
                 i++;
             }
             dLong = i+100;
